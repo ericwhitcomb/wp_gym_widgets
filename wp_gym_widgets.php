@@ -20,8 +20,8 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'wp_gym_classes', // Base ID
-			esc_html__( 'WP Gym - Classes List', 'text_domain' ), // Name
-			array( 'description' => esc_html__( 'Displays different classes in the widget', 'text_domain' ), ) // Args
+			esc_html__( 'WP Gym - Class List', 'text_domain' ), // Name
+			array( 'description' => esc_html__( 'Displays Class List', 'text_domain' ), ) // Args
 		);
 	}
 
@@ -84,12 +84,40 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
+		// variables bound to the fields
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'New title', 'text_domain' );
+		$quantity = ! empty( $instance['quantity'] ) ? $instance['quantity'] : esc_html__( '3', 'text_domain' );
 		?>
+
+		<!-- Title Field -->
 		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'text_domain' ); ?></label> 
-		<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
+			<?php esc_attr_e( 'Title:', 'text_domain' ); ?>
+		</label> 
+		<input 
+			class="widefat" 
+			id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" 
+			name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" 
+			type="text" 
+			value="<?php echo esc_attr( $title ); ?>">
 		</p>
+
+		<!-- Quantity Field -->
+		<p>
+		<label for="<?php echo esc_attr( $this->get_field_id( 'quantity' ) ); ?>">
+			<?php esc_attr_e( 'Number of Classes to Display:', 'text_domain' ); ?>
+		</label> 
+		<input 
+			class="widefat" 
+			id="<?php echo esc_attr( $this->get_field_id( 'quantity' ) ); ?>" 
+			name="<?php echo esc_attr( $this->get_field_name( 'quantity' ) ); ?>" 
+			type="number" 
+			value="<?php echo esc_attr( $quantity ); ?>"
+			min="0"
+			max="<?php echo wp_count_posts('wp_gym_classes')->publish; ?>">
+		<small>Current number of published classes is <?php echo wp_count_posts('wp_gym_classes')->publish; ?></small>
+		</p>
+
 		<?php 
 	}
 
@@ -106,6 +134,7 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		$instance['quantity'] = ( ! empty( $new_instance['quantity'] ) ) ? sanitize_text_field( $new_instance['quantity'] ) : '';
 
 		return $instance;
 	}
