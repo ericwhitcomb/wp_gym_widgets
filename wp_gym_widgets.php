@@ -36,16 +36,18 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		echo $args['before_widget']; ?>
 
+		<h3 class="text-primary text-center sidebar-class-list-header">Our Classes</h3>
+
 		<ul class="sidebar-class-list">
 			<?php
 				$args = array(
-					'post_type' => 'wp_gym_classes'
+					'post_type' => 'wp_gym_classes',
+					'posts_per_page' => 3,
+					'orderby' => 'rand'
 				);
 
 				// Use WP_Query and append the results into $classes
 				$classes = new WP_Query($args);
-				$classes->posts = array_reverse($classes->posts);
-
 				while ($classes->have_posts()): $classes->the_post();
 			?>
 
@@ -56,7 +58,7 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 
 				<div class="sidebar-class-content">
 					<a href="<?php the_permalink(); ?>">
-						<h3><?php the_title(); ?></h3>
+						<h4><?php the_title(); ?></h4>
 					</a>
 
 					<?php 
@@ -64,7 +66,7 @@ class WP_Gym_Classes_Widget extends WP_Widget {
             $start_time = get_field('start_time');
             $end_time = get_field('end_time');
           ?>
-          <p><?php echo $class_days . ' - ' . $start_time . ' to ' . $end_time;?></p>
+          <p><?php echo $class_days . '<br>' . $start_time . ' to ' . $end_time;?></p>
 				</div>
 			</li>
 
