@@ -34,12 +34,44 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		echo $args['before_widget'];
-		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
-		}
-		echo esc_html__( 'Hello, World!', 'text_domain' );
-		echo $args['after_widget'];
+		echo $args['before_widget']; ?>
+
+		<ul class="sidebar-class-list">
+			<?php
+				$args = array(
+					'post_type' => 'wp_gym_classes'
+				);
+
+				// Use WP_Query and append the results into $classes
+				$classes = new WP_Query($args);
+				$classes->posts = array_reverse($classes->posts);
+
+				while ($classes->have_posts()): $classes->the_post();
+			?>
+
+			<li class="sidebar-class-item">
+				<div class="sidebar-class-image">
+					<?php the_post_thumbnail('thumbnail'); ?>
+				</div>
+
+				<div class="sidebar-class-content">
+					<a href="<?php the_permalink(); ?>">
+						<h3><?php the_title(); ?></h3>
+					</a>
+
+					<?php 
+            $class_days = get_field('class_days');
+            $start_time = get_field('start_time');
+            $end_time = get_field('end_time');
+          ?>
+          <p><?php echo $class_days . ' - ' . $start_time . ' to ' . $end_time;?></p>
+				</div>
+			</li>
+
+			<?php endwhile; wp_reset_postdata(); ?>
+		</ul>
+		
+		<?php echo $args['after_widget'];
 	}
 
 	/**
