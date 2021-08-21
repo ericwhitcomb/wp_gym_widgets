@@ -91,7 +91,7 @@ class WP_Gym_Classes_Widget extends WP_Widget {
 	public function form( $instance ) {
 		// variables bound to the fields
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'New title', 'text_domain' );
-		$quantity = ! empty( $instance['quantity'] ) ? $instance['quantity'] : esc_html__( '3', 'text_domain' );
+		$quantity = ! empty( $instance['quantity'] ) ? $instance['quantity'] : esc_html__( '0', 'text_domain' );
 		?>
 
 		<!-- Title Field -->
